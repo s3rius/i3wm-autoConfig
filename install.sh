@@ -1,6 +1,6 @@
 #!/bin/bash
 pacman -S i3 compton conky nitrogen rofi maim xclip playerctl
-cp -R .i3 ~/.config/i4
+cp -R .i3 ~/.config/i3
 cp .compton.conf ~/
 cp .conkyrc ~/
 
