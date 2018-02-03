@@ -77,6 +77,9 @@ bindsym $mod+Return exec i3-sensible-terminal
 # kill focused window
 bindsym Mod1+F4 kill
 
+# Lock screen
+bindsym control+mod1+l exec sh ~/.config/i3/lock.sh
+
 # start dmenu (a program launcher)
 bindsym $mod+d exec rofi -show drun
 bindsym $mod+Shift+d exec rofi -show run
