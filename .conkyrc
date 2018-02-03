@@ -1,9 +1,30 @@
 out_to_x no
-own_window no
+own_window yes
 out_to_console yes
-background no
-max_text_width 0
+background transpanent
+#max_text_width 0
 net_avg_samples 3
+
+own_window_argb_visual yes
+own_window_type normal
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+own_window_argb_value 0 
+
+#own_window_argb_visual = true
+#own_window_argb_value = 70
+
+#own_window yes
+#own_window_class Conky
+#own_window_type override
+#background yes
+
+#own_window_argb_visual true
+#own_window_argb_value 0
+#own_window_type desktop
+#own_window no
+#own_window_transparent yes
+#own_window_type normal
+#own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
 
 # Update interval in seconds
 update_interval 1
