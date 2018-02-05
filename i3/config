@@ -58,8 +58,8 @@ bindsym $mod+Shift+Print exec maim -s ~/Pictures/screenshot$(date +%s).png && no
 
 
 #Display blight
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5
+bindsym XF86MonBrightnessUp exec light -A 10
+bindsym XF86MonBrightnessDown exec light -U 10
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -214,12 +214,12 @@ for_window [class="^.*"] border pixel 1 floating enable
 new_window 1pixel 
 
 # colors
-# class                            	border  backgr.    text
+# class                      border  backgr.    text
 client.focused			       #315858  #315858  #111111
-#client.focused			       #bf3f34  #bf3f34  #bf3f34
+#client.focused			    #bf3f34  #bf3f34  #bf3f34
 client.unfocused		       #2c2e2f  #2c2e2f  #315858
-client.focused_inactive		       #2c2e2f  #2c2e2f  #2c2e2f
-client.urgent			       #383a3b 	#383a3b  #ee0000
+client.focused_inactive		 #2c2e2f  #2c2e2f  #2c2e2f
+client.urgent			       #383a3b  #383a3b  #ee0000
 
 
 # Start i3bar to display a workspace bar (plus the system information i3status

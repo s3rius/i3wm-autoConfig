@@ -25,6 +25,7 @@ print "loaded new config"
 cp ~/.conkyrc .
 print "Loaded .conkyrc"
 cp ~/.compton.conf .
+print "Loaded compton.conf"
 cd $path
 print "returned into $path" 
 
