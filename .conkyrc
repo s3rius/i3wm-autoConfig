@@ -70,27 +70,19 @@ TEXT
         "color"     : ${if_match ${acpitemp}>55}"\#ff0000"${else}"\#88ABC4"${endif}
     },
     {
-        "full_text" : " ${uptime_short} ",
+        "full_text" : "${uptime_short} ",
         "color"     : "\#88ABC4"
     },
     {
-        "full_text" : " ${wireless_essid wlp6s0} [ ${addr wlp6s0} ] ",
+        "full_text" : "${wireless_essid wlp6s0} [ ${addr wlp6s0} ]",
         "color"     : "\#88ABC4"
     },
     {
-        "full_text" : " ${downspeed wlp6s0}/s ",
-        "color"     : "\#88ABC4"
-    },
-    {
-        "full_text" : " ${upspeed wlp6s0}/s ",
-        "color"     : "\#88ABC4"
-    },
-    {
-        "full_text" : " ${exec amixer -c 1 get Master | grep Mono: | cut -d " " -f6 | grep -oP '\d*'}%",
+        "full_text" : "${exec amixer -c 1 get Master | grep Mono: | cut -d " " -f6 | grep -oP '\d*'}%",
         "color"     : ${if_match "${exec ~/.config/i3/volumeMute.sh}"!="on"}"\#ff0000"${else}"\#88ABC4"${endif}
     },
     {
-	"full_text": ${if_match "${exec ~/.config/i3/batt.sh}" != "Full"}${if_match "${exec ~/.config/i3/batt.sh}"!="Charging"}"${battery_percent BAT0}%"${else}" ${battery_percent BAT0}%"${endif}${else}"${battery_percent BAT0}%"${endif},
+	"full_text": ${if_match "${exec ~/.config/i3/batt.sh}" != "Full"}${if_match "${exec ~/.config/i3/batt.sh}"!="Charging"}"${battery_percent BAT0}%"${else}"${battery_percent BAT0}%"${endif}${else}"${battery_percent BAT0}%"${endif},
 
         "color"     : ${if_match ${battery_percent BAT0	}<15}
 			"\#ff0000" 
@@ -101,7 +93,7 @@ TEXT
 		${endif}
     },
     {
-        "full_text" : " ${time %A %d %b} ${time %R} ",
+        "full_text" : "${time %A %d %b} ${time %R} ",
         "color"     : "\#88ABC4"
     },
     {
