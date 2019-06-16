@@ -6,7 +6,7 @@ print(){
 
 i3path="~/.config/i3"
 
-sudo pacman -S i3 compton conky nitrogen rofi maim xclip playerctl cronie help2man
+sudo pacman -S i3 compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome
 mv $i3path ~/.config/i3.old
 print "$i3path moved into ~/.config/i3.old"
 cp -R i3 ~/.config/
@@ -15,17 +15,6 @@ cp .compton.conf ~/
 print "Copied compton config into ~/.compton.conf"
 cp .conkyrc ~/
 print "Copied conkyrc config into ~/.conkyrc"
-
-print "[git] started clone of /haikarainen/light repo"
-print "[git] that library needs for adjust brightness on pc"
-git clone --progress https://github.com/haikarainen/light.git 2> gitLightOutput.log
-print "[git] output is shown in file gitLightOutput.log"
-cd light
-print "[making] $(sudo make)"
-print "[installing light]$(sudo make install)"
-cd ..
-rm -rf light/
-print "removed light repo"
 
 if [ "$(crontab -l | head -n1 | cut -d " " -f1)" == "*" ]
 then 

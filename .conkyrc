@@ -78,6 +78,10 @@ TEXT
         "color"     : "\#88ABC4"
     },
     {
+        "full_text" : "${exec light -G}",
+        "color"     : "\#88ABC4"
+    },
+    {
         "full_text" : "${exec amixer -c 1 get Master | grep Mono: | cut -d " " -f6 | grep -oP '\d*'}%",
         "color"     : ${if_match "${exec ~/.config/i3/volumeMute.sh}"!="on"}"\#ff0000"${else}"\#88ABC4"${endif}
     },
