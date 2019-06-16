@@ -6,7 +6,7 @@ print(){
 
 i3path="~/.config/i3"
 
-sudo pacman -S i3 compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome
+sudo pacman -S i3 compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf 
 mv $i3path ~/.config/i3.old
 print "$i3path moved into ~/.config/i3.old"
 cp -R i3 ~/.config/
