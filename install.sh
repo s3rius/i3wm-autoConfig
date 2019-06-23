@@ -1,12 +1,20 @@
 #!/bin/bash
-
+LOG_FILE="~/i3-readme.txt"
 print(){
 	echo "[i3wm-installer] $1"
 }
 
+printlog(){
+  echo "[i3-wm-installer] $1"
+  echo "$1" >> $LOG_FILE
+}
+
 i3path="~/.config/i3"
 
-sudo pacman -S i3 compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf 
+sudo pacman -S -needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer
+
+sudo pikaur -S --noedit --nodiff --needed xkb-switch deadd-notification-center-bin i3lock-color betterlockscreen-git
+
 mv $i3path ~/.config/i3.old
 print "$i3path moved into ~/.config/i3.old"
 cp -R i3 ~/.config/
@@ -29,17 +37,29 @@ else
 	crontab i3/crontabWork.txt
 	print "Added new job in cron for battery check"
 fi
+mkdir -p "~/.config/rofi/themes/"
 
+if [ -e "~/.config/rofi/config" ]; then
+  print "ROFI config found"
+else
+  touch "~/.config/rofi/config"
+  print "Created ROFI config"
+fi
 
+cp ./rofi_themes/hyper.rasi ~/.config/rofi/themes/hyper.rasi
+print "copied rofi configuration[hyper]"
 sudo systemctl start cronie.service
 print "started cronie service"
 sudo systemctl enable cronie.service
 print "enabled cronie for autostart with system"
 
-#pwd
-#sudo git clone https://github.com/unix121/i3wm-themer.git
-#cd i3wm-themer/scripts/
-#sh i3wmthemer -b i3.backup
-#sh i3wmthemer -c
-#sh i3wmthemer -t Forest
-
+print " **** "
+print "Installation succeed."
+print "Start your i3 by running 'startx'"
+print "Additional steps to configure wm."
+print "Instruction will be saved in ~/i3-readme.txt"
+print ""
+rm $LOG_FILE
+printlog "To set wallpaper run 'nitrogen'"
+printlog "To change rofi theme to 'hyper' run 'rofi-theme-selector' and select 'hyper by s3rius'"
+printlog "To add wallpaper to lockscreen run 'betterlockscreen -u /path/to/wallpapers'"

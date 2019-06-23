@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 print(){
  echo "[i3 updater] $1"
 }
@@ -26,6 +25,8 @@ cp ~/.conkyrc .
 print "Loaded .conkyrc"
 cp ~/.compton.conf .
 print "Loaded compton.conf"
+cp ~/.config/rofi/themes/hyper.rasi ./rofi_themes/
+print "Loaded rofi theme [hyper]"
 cd $path
 print "returned into $path" 
 

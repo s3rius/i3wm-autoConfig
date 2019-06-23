@@ -27,7 +27,7 @@ own_window_argb_value 0
 #own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
 
 # Update interval in seconds
-update_interval 1
+update_interval 0.3
 
 # This is the number of times Conky will update before quitting.
 # Set to zero to run forever.
@@ -59,6 +59,12 @@ TEXT
 # JSON for i3bar
 
 [
+    # ${if_match ${exec "playerctl status"} "Playing" }
+    # {
+        # "full_text" : "playing"
+        # "color"     : "\#88ABC4"
+    # },
+    # ${endif}
     {
         "icon"      : "$HOME/.config/i3/xbmicons/mem.xbm",
         "full_text" : "${mem} [ ${memperc}% ] ",
@@ -68,6 +74,10 @@ TEXT
         "icon"      : "~/.config/i3/xbmicons/temp.xbm",
         "full_text" : "${acpitemp}°C ",
         "color"     : ${if_match ${acpitemp}>55}"\#ff0000"${else}"\#88ABC4"${endif}
+    }, 
+    { 
+        "full_text" : "${exec xkb-switch | sed 's/us/en/' | tr '[a-z]' '[A-Z]'}",
+        "color"     : "\#88ABC4"
     },
     {
         "full_text" : "${uptime_short} ",
@@ -78,23 +88,22 @@ TEXT
         "color"     : "\#88ABC4"
     },
     {
-        "full_text" : "${exec light -G}",
+        "full_text" : "${exec light | cut -d "." -f1}",
         "color"     : "\#88ABC4"
     },
     {
-        "full_text" : "${exec amixer -c 1 get Master | grep Mono: | cut -d " " -f6 | grep -oP '\d*'}%",
+        "full_text" : "🔈${exec amixer -c 1 get Master | grep Mono: | cut -d " " -f6 | grep -oP '\d*'}%",
         "color"     : ${if_match "${exec ~/.config/i3/volumeMute.sh}"!="on"}"\#ff0000"${else}"\#88ABC4"${endif}
     },
     {
-	"full_text": ${if_match "${exec ~/.config/i3/batt.sh}" != "Full"}${if_match "${exec ~/.config/i3/batt.sh}"!="Charging"}"${battery_percent BAT0}%"${else}"${battery_percent BAT0}%"${endif}${else}"${battery_percent BAT0}%"${endif},
-
+	      "full_text" : ${if_match "${exec ~/.config/i3/batt.sh}" != "Full"}${if_match "${exec ~/.config/i3/batt.sh}"!="Charging"}"${battery_percent BAT0}%"${else}"${battery_percent BAT0}%"${endif}${else}"${battery_percent BAT0}%"${endif},
         "color"     : ${if_match ${battery_percent BAT0	}<15}
-			"\#ff0000" 
-			#${execi 20 xcalib -red 1.1 30.0 100.0 -alter}
-   			#${exec notify-send -u critical "$(acpi -b)"}
-		${else}
-			"\#88ABC4"
-		${endif}
+			                  "\#ff0000" 
+                        # ${execi 20 xcalib -red 1.1 30.0 100.0 -alter}
+                        # ${exec notify-send -u critical "$(acpi -b)"}
+		                  ${else}
+			                  "\#88ABC4"
+		                  ${endif}
     },
     {
         "full_text" : "${time %A %d %b} ${time %R} ",

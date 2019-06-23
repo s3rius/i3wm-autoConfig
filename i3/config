@@ -13,9 +13,13 @@
 set $mod Mod4
 
 #Exec at startup block
+exec xinput set-prop "Synaptics s3203" "libinput Tapping Enabled" 1
 exec nitrogen --restore
+exec redshift -l 53.204854:50.127936 
+exec udiskie
+exec deadd-notification-center
 exec /usr/bin/compton --config ~/.compton.conf
-exec setxkbmap -model pc105 -layout us,ru -option grp:win_space_toggle
+exec setxkbmap -model pc105 -layout us,ru -option grp:caps_toggle
 exec --no-startup-id ~/.config/i3/i3-battery-popup.sh
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -78,7 +82,10 @@ bindsym $mod+Return exec konsole
 bindsym Mod1+F4 kill
 
 # Lock screen
-bindsym control+mod1+l exec sh ~/.config/i3/lock.sh
+bindsym control+mod1+l exec betterlockscreen -l
+
+# Show notification center
+bindsym control+n exec kill -s USR1 $(pidof deadd-notification-center)
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec rofi -show drun
@@ -210,32 +217,33 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-for_window [class="^.*"] border pixel 1 floating enable
-new_window 1pixel 
-
+for_window [class=".*"] border pixel 0
+# for_window [class="^.*"] border pixel 0 floating enable
+# new_window 1pixel
+gaps inner 10
+gaps outer 25
 # colors
-# class                      border  backgr.    text
-client.focused			       #315858  #315858  #111111
-#client.focused			    #bf3f34  #bf3f34  #bf3f34
-client.unfocused		       #2c2e2f  #2c2e2f  #315858
-client.focused_inactive		 #2c2e2f  #2c2e2f  #2c2e2f
-client.urgent			       #383a3b  #383a3b  #ee0000
+# class                      border   backgr.  text
+client.focused	             #315858  #315858  #111111
+client.focused	             #bf3f34  #bf3f34  #bf3f34
+client.unfocused             #2c2e2f  #2c2e2f  #315858
+client.focused_inactive      #2c2e2f  #2c2e2f  #2c2e2f
+client.urgent                #383a3b  #383a3b  #ee0000
 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command ~/.config/i3/conky.sh
-
-
+  status_command ~/.config/i3/conky.sh
+  i3bar_command i3bar -t
   colors {
-	statusline	#76c2d6
-	background	#191919
+    statusline	#75c2d690
+    background	#19191990
 	
-	# class             	border 		backgrd 	text
-        focused_workspace      #191919 		#191919 	#bf3f34
-        active_workspace       #191919 		#191919 	#696f89
-        inactive_workspace     #191919 		#191919 	#696f89
-        urgent_workspace       #191919 		#191919 	#c7a551
-   }
+  	# class             	 border 		  backgrd 	  text
+    focused_workspace      #19191990 		#19191990 	#bf3f34
+    active_workspace       #19191990 		#19191990 	#696f89
+    inactive_workspace     #19191990 		#19191990 	#696f89
+    urgent_workspace       #19191990 		#19191990 	#c7a551
+  }
 }
