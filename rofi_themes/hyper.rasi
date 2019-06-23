@@ -7,7 +7,7 @@
  */
 
 configuration{
-  show-icons: true;
+  show-icons: false;
 }
 
 * {
@@ -19,8 +19,8 @@ configuration{
   mangenta:   #d886f3;
   cyan:       #6cdcf7;
   emphasis:   #2e12f7be;
-  text:       #dfdfdf;
-  text-alt:   #b2b2b2;
+  text:       #000000;
+  text-alt:   #94C570;
   fg:         #abb2bf;
   bg:         #282c34;
 
@@ -28,13 +28,13 @@ configuration{
   background-color: transparent;
 
   font: "Knack Nerd Font 14";
-  text-color: @text;
+  text-color: @text-alt;
 }
 
 window {
   transparency: "real";
   fullscreen: true;
-  background-color: #2465a68b;
+  background-color: #00000090;
 }
 
 mainbox {
@@ -42,39 +42,37 @@ mainbox {
 }
 
 inputbar {
-  margin: 0px 0px 20px 0px;
+  margin: 0px 0px 10px 0px;
   children: [prompt, textbox-prompt-colon, entry, case-indicator];
 }
 
 prompt {
-  text-color: @blue;
+  text-color: @text-alt;
 }
 
 textbox-prompt-colon {
   expand: false;
   str: "$";
-  text-color: @text-alt;
+  text-color: #ffffff;
 }
 
 entry {
-  margin: 0px 20px;
+  margin: 0px 5px;
 }
 
 listview {
-  spacing: 15px;
   dynamic: true;
   scrollbar: false;
 }
 
 element {
-  padding: 5px;
   text-color: @text-alt;
   highlight: bold #ffffffc3; /* purple */
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 element selected {
-  background-color: @emphasis;
+  background-color: #94C570;
   text-color: @text;
 }
 
@@ -95,7 +93,6 @@ message {
 }
 
 button selected {
-  padding: 5px;
   border-radius: 3px;
   background-color: @emphasis;
 }
