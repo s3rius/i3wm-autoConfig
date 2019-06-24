@@ -17,8 +17,7 @@
   Currently included features:  
   * Compton effects for windows. Such as blur and fading.
   * I3-gaps.
-  * Conky system monitor as bott
-  * om status bar.
+  * Conky system monitor as bottom status bar.
   * Font awesome support.
 ## Screenshots
 ![screenshot1](images/screen1.png)
