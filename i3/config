@@ -41,7 +41,7 @@ bindsym XF86AudioLowerVolume exec "amixer -c 1 sset Master '5%-'"
 bindsym XF86AudioMute exec "pactl set-sink-mute 0 toggle"
 
 #Open file manager
-bindsym $mod+e exec konsole -e ranger 
+bindsym $mod+e exec konsole -e xdg-open ~ 
 
 # Multimedia buttons
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -55,8 +55,8 @@ set $picture_folder ~/Pictures
 #bindsym Print exec deepin-screenshot -f
 #bindsym Control+Print exec deepin-screenshot
 bindsym Print exec maim --format=png /dev/stdout | xclip -selection clipboard -t image/png -i && notify-send "Screenshot saved" 
-bindsym Shift+Print exec maim -s --format=png /dev/stdout | xclip -selection clipboard -t image/png -i 
-bindsym $mod+Print exec maim ~/Pictures/screenshot$(date +%s).png && notify-send "Screenshot saved" 
+bindsym Shift+Print exec maim -s --format=png /dev/stdout | xclip -selection clipboard -t image/png -i && notify-send "Screenshot copied to clipboard" 
+bindsym $mod+Print exec maim ~/Pictures/screenshot$(date +%s).png -d 3 && notify-send "Screenshot saved" 
 bindsym $mod+Shift+Print exec maim -s ~/Pictures/screenshot$(date +%s).png && notify-send "Screenshot saved"
 
 
@@ -85,7 +85,7 @@ bindsym Mod1+F4 kill
 bindsym control+mod1+l exec betterlockscreen -l
 
 # Show notification center
-bindsym control+n exec kill -s USR1 $(pidof deadd-notification-center)
+bindsym $mod+p exec kill -s USR1 $(pidof deadd-notification-center)
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec rofi -show drun
@@ -134,7 +134,7 @@ bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+x toggle split
+bindsym $mod+x layout default
 
 # toggle tiling / floating
 bindsym $mod+Shift+f floating toggle

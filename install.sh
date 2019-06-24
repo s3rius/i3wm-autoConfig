@@ -1,5 +1,7 @@
 #!/bin/bash
-LOG_FILE="~/i3-readme.txt"
+
+LOG_FILE="$HOME/i3-readme.txt"
+
 print(){
 	echo "[i3wm-installer] $1"
 }
@@ -9,15 +11,26 @@ printlog(){
   echo "$1" >> $LOG_FILE
 }
 
-i3path="~/.config/i3"
+i3path="$HOME/.config/i3"
 
-sudo pacman -S -needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer
+if [ -x "$(command -v pikaur)" ]; then
+  print "Found pikaur installation"
+else
+  print "Pikaur was not found."
+  git clone https://aur.archlinux.org/pikaur.git
+  cd pikaur
+  makepkg -fsri
+  cd ..
+  rm -rfv pikaur/
+fi
+
+sudo pacman -S --needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer
 
 sudo pikaur -S --noedit --nodiff --needed xkb-switch deadd-notification-center-bin i3lock-color betterlockscreen-git
 
-mv $i3path ~/.config/i3.old
+mv $i3path $HOME/.config/i3.old
 print "$i3path moved into ~/.config/i3.old"
-cp -R i3 ~/.config/
+cp -R i3 $HOME/.config/
 print "copied new configs into $i3path"
 cp .compton.conf ~/
 print "Copied compton config into ~/.compton.conf"
@@ -58,8 +71,10 @@ print "Installation succeed."
 print "Start your i3 by running 'startx'"
 print "Additional steps to configure wm."
 print "Instruction will be saved in ~/i3-readme.txt"
+print " **** "
 print ""
-rm $LOG_FILE
+rm -vf $LOG_FILE
+touch $LOG_FILE
 printlog "To set wallpaper run 'nitrogen'"
 printlog "To change rofi theme to 'hyper' run 'rofi-theme-selector' and select 'hyper by s3rius'"
 printlog "To add wallpaper to lockscreen run 'betterlockscreen -u /path/to/wallpapers'"
