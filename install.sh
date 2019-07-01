@@ -24,9 +24,12 @@ else
   rm -rfv pikaur/
 fi
 
-sudo pacman -S --needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer
+sudo pacman -S --needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer python
 
 sudo pikaur -S --noedit --nodiff --needed xkb-switch deadd-notification-center-bin i3lock-color betterlockscreen-git
+
+pip install --user tuijam
+pip install -r i3/requirements.txt --user
 
 mv $i3path $HOME/.config/i3.old
 print "$i3path moved into ~/.config/i3.old"

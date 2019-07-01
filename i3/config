@@ -17,6 +17,7 @@ exec xinput set-prop "Synaptics s3203" "libinput Tapping Enabled" 1
 exec nitrogen --restore
 exec redshift -l 53.204854:50.127936 
 exec udiskie
+exec python ~/.config/i3/music_background.py
 exec deadd-notification-center
 exec /usr/bin/compton --config ~/.compton.conf
 exec setxkbmap -model pc105 -layout us,ru -option grp:caps_toggle
