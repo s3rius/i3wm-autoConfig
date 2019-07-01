@@ -20,9 +20,17 @@
   * Conky system monitor as bottom status bar.
   * Font awesome support.
 ## Screenshots
+
+### Standart mode
+
 ![screenshot1](images/screen1.png)
 ![screenshot2](images/screen2.png)
 ![screenshot3](images/screen3.png)
+
+### Music mode
+
+![music1](images/music_screen1.png)
+![music2](images/music_screen2.png)
 
 # Installation
 To install this i3setup. You can simply run following:
