@@ -7,6 +7,8 @@ import requests
 from PIL import Image, ImageDraw
 import io
 import musicbrainzngs
+import math
+import random
 
 musicbrainzngs.set_useragent('Background changer', '0.2.1',
                              'https://github.com/s3rius')
@@ -60,14 +62,60 @@ def interpolate(f_co, t_co, interval):
         yield [round(f + det * i) for f, det in zip(f_co, det_co)]
 
 
+def draw_linear_gradient(image, from_color, to_color, inversion):
+    print("Generating linear gradient")
+    if inversion:
+        tmp = from_color
+        from_color = to_color
+        to_color = tmp
+    drawer = ImageDraw.Draw(image)
+    for i, color in enumerate(interpolate(from_color, to_color, WIDTH * 2)):
+        drawer.line([(i, 0), (0, i)], tuple(color), width=1)
+
+
+def draw_radial_gradient(image: Image, innerColor, outerColor, inversion):
+    print("Generating radial gradient.")
+    if inversion:
+        tmp = innerColor
+        innerColor = outerColor
+        outerColor = tmp
+    imgsize = (image.width, image.height)
+    s2 = math.sqrt(2)
+    for y in range(imgsize[1]):
+        for x in range(imgsize[0]):
+
+            # Find the distance to the center
+            distanceToCenter = math.sqrt((x - imgsize[0] / 2)**2 +
+                                         (y - imgsize[1] / 2)**2)
+
+            # Make it on a scale from 0 to 1
+            distanceToCenter = distanceToCenter / (s2 * imgsize[0] / 2)
+
+            # Calculate r, g, and b values
+            r = outerColor[0] * distanceToCenter + innerColor[0] * (
+                1 - distanceToCenter)
+            g = outerColor[1] * distanceToCenter + innerColor[1] * (
+                1 - distanceToCenter)
+            b = outerColor[2] * distanceToCenter + innerColor[2] * (
+                1 - distanceToCenter)
+
+            # Place the pixel
+            image.putpixel((x, y), (int(r), int(g), int(b)))
+
+
+def genearate_gradinent(width, height, from_color, to_color):
+    gradient = Image.new('RGBA', (width, height))
+    inversion = random.randint(0, 1) == 0
+    draw_radial_gradient(gradient, from_color, to_color, inversion)
+    return gradient
+
+
 def update_bg(meta: MetaData):
     if meta.image_bytes is None:
         restore_bg()
     try:
         cover = Image.open(meta.image_bytes)
         #  cover.save(image_path)
-        gradient = Image.new('RGBA', (WIDTH, HEIGHT), color=0)
-        draw = ImageDraw.Draw(gradient)
         pixels = cover.getcolors(cover.height * cover.width)
         most_frequent_pixel = pixels[0]
         min_frequent_pixel = pixels[0]
@@ -83,10 +131,8 @@ def update_bg(meta: MetaData):
         mask_drawer.ellipse((0, 0) + big_cover_size, fill=255)
         cover_mask = cover_mask.resize(cover.size, Image.ANTIALIAS)
         cover.putalpha(cover_mask)
-        for i, color in enumerate(
-                interpolate(most_frequent_pixel[1], min_frequent_pixel[1],
-                            WIDTH * 2)):
-            draw.line([(i, 0), (0, i)], tuple(color), width=1)
+        gradient = genearate_gradinent(WIDTH, HEIGHT, most_frequent_pixel[1],
+                                       min_frequent_pixel[1])
         gradient.paste(cover, ((WIDTH - cover.width) // 2,
                                (HEIGHT - cover.height) // 2),
                        mask=cover_mask)
@@ -94,7 +140,8 @@ def update_bg(meta: MetaData):
         subprocess.Popen(['feh', '--bg-center', image_path],
                          stderr=subprocess.PIPE,
                          stdout=subprocess.PIPE)
-    except Exception:
+    except Exception as e:
+        print(f"We're fucked up, sir. Exception: {e}")
         restore_bg()
 
 
