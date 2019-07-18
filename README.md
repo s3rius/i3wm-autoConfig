@@ -31,6 +31,7 @@
 
 ![music1](images/music_screen1.png)
 ![music2](images/music_screen2.png)
+![music2](images/music_screen3.png)
 
 # Installation
 To install this i3setup. You can simply run following:
