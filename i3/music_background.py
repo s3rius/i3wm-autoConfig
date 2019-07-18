@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-
 from gi.repository import Playerctl, GLib
 import subprocess
 import screeninfo
 import requests
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 import io
 import musicbrainzngs
 import math
@@ -13,13 +12,27 @@ import random
 musicbrainzngs.set_useragent('Background changer', '0.2.1',
                              'https://github.com/s3rius')
 manager = Playerctl.PlayerManager()
-(WIDTH, HEIGHT) = (1366, 768)
+(WIDTH, HEIGHT) = (0, 0)
 image_path = '/tmp/music_bg.png'
 IMAGE_SMOOTH_RATE = 5
 for monitor in screeninfo.get_monitors():
     if monitor.height > HEIGHT and monitor.width > WIDTH:
         WIDTH = monitor.width
         HEIGHT = monitor.height
+print(f"Screen size is {WIDTH}x{HEIGHT}")
+
+distances = [[0 for i in range(WIDTH)] for i in range(HEIGHT)]
+
+for y in range(HEIGHT):
+    for x in range(WIDTH):
+        # Find the distance to the center
+        distanceToCenter = math.sqrt((x - WIDTH / 2)**2 + (y - HEIGHT / 2)**2)
+
+        # Make it on a scale from 0 to 1
+        distanceToCenter = distanceToCenter / (math.sqrt(2) * WIDTH / 2)
+        distances[y][x] = distanceToCenter
+
+print("Distances calculated")
 
 
 class MetaData(object):
@@ -32,6 +45,7 @@ class MetaData(object):
 
     def update_image(self):
         if self.artUrl is not None:
+            print("Started loading...")
             response = requests.get(self.artUrl)
             if not response.ok:
                 restore_bg()
@@ -80,17 +94,9 @@ def draw_radial_gradient(image: Image, innerColor, outerColor, inversion):
         innerColor = outerColor
         outerColor = tmp
     imgsize = (image.width, image.height)
-    s2 = math.sqrt(2)
     for y in range(imgsize[1]):
         for x in range(imgsize[0]):
-
-            # Find the distance to the center
-            distanceToCenter = math.sqrt((x - imgsize[0] / 2)**2 +
-                                         (y - imgsize[1] / 2)**2)
-
-            # Make it on a scale from 0 to 1
-            distanceToCenter = distanceToCenter / (s2 * imgsize[0] / 2)
-
+            distanceToCenter = distances[y][x]
             # Calculate r, g, and b values
             r = outerColor[0] * distanceToCenter + innerColor[0] * (
                 1 - distanceToCenter)
@@ -99,15 +105,26 @@ def draw_radial_gradient(image: Image, innerColor, outerColor, inversion):
             b = outerColor[2] * distanceToCenter + innerColor[2] * (
                 1 - distanceToCenter)
 
-            # Place the pixel
             image.putpixel((x, y), (int(r), int(g), int(b)))
 
 
 def genearate_gradinent(width, height, from_color, to_color):
-    gradient = Image.new('RGBA', (width, height))
+    gradient = Image.new('RGB', (width, height))
     inversion = random.randint(0, 1) == 0
     draw_radial_gradient(gradient, from_color, to_color, inversion)
+    #  draw_linear_gradient(gradient, from_color, to_color, inversion)
+
     return gradient
+
+
+def scaled_blur(metadata: MetaData):
+    back = Image.open(metadata.image_bytes)
+    resized = back.resize((back.width * 3, back.height * 3),
+                          Image.ANTIALIAS).filter(ImageFilter.GaussianBlur(8))
+    resized = resized.crop(
+        ((resized.width - WIDTH) / 2, (resized.height - HEIGHT) / 2,
+         (resized.width + WIDTH) / 2, (resized.height + HEIGHT) / 2))
+    return resized
 
 
 def update_bg(meta: MetaData):
@@ -131,8 +148,11 @@ def update_bg(meta: MetaData):
         mask_drawer.ellipse((0, 0) + big_cover_size, fill=255)
         cover_mask = cover_mask.resize(cover.size, Image.ANTIALIAS)
         cover.putalpha(cover_mask)
-        gradient = genearate_gradinent(WIDTH, HEIGHT, most_frequent_pixel[1],
-                                       min_frequent_pixel[1])
+        gradient = scaled_blur(meta)
+        # gradient = genearate_gradinent(WIDTH, HEIGHT,
+        # most_frequent_pixel[1],
+        # min_frequent_pixel[1])
+        gradient = scaled_blur(meta)
         gradient.paste(cover, ((WIDTH - cover.width) // 2,
                                (HEIGHT - cover.height) // 2),
                        mask=cover_mask)
