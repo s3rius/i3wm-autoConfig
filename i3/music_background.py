@@ -8,19 +8,26 @@ import io
 import musicbrainzngs
 import math
 import random
-
+import sounddevice as sd
+import numpy as np
 musicbrainzngs.set_useragent('Background changer', '0.2.1',
                              'https://github.com/s3rius')
 manager = Playerctl.PlayerManager()
 (WIDTH, HEIGHT) = (0, 0)
 image_path = '/tmp/music_bg.png'
+equalizer_path = "/tmp/eq_bg.png"
 IMAGE_SMOOTH_RATE = 5
-for monitor in screeninfo.get_monitors():
-    if monitor.height > HEIGHT and monitor.width > WIDTH:
-        WIDTH = monitor.width
-        HEIGHT = monitor.height
-print(f"Screen size is {WIDTH}x{HEIGHT}")
 
+samplerate = sd.query_devices(None, 'input')['default_samplerate']
+print(f"samplerate = {samplerate}")
+low, high = (100, 2000)
+delta_f = (high - low) / 40
+
+fftsize = math.ceil(samplerate / delta_f)
+
+low_bin = math.floor(low / delta_f)
+
+current_image = None
 distances = [[0 for i in range(WIDTH)] for i in range(HEIGHT)]
 
 for y in range(HEIGHT):
@@ -33,6 +40,37 @@ for y in range(HEIGHT):
         distances[y][x] = distanceToCenter
 
 print("Distances calculated")
+
+#  class FehViewer(ImageShow.UnixViewer):
+#
+#  def show_file(self, filename, **options):
+#  os.system('feh --bg-center %s' % filename)
+#  return 1
+
+#  ImageShow.register(FehViewer, order=-1)
+
+
+def music_callback(indata, frames, time, status):
+    #  print("listening")
+    if any(indata):
+        magnitude = np.abs(np.fft.rfft(indata[:, 0], n=fftsize))
+        magnitude *= 10 / fftsize
+        global current_image
+        local_img = current_image.copy()
+        drawer = ImageDraw.Draw(local_img)
+        for i, el in enumerate(magnitude):
+            print(f"i({i}), el({el * 10000})")
+            drawer.line((i * 2, HEIGHT, i * 2, HEIGHT - (el * 100)),
+                        fill=200,
+                        width=2)
+        del drawer
+        local_img.save(equalizer_path)
+        subprocess.Popen(['feh', '--bg-center', equalizer_path],
+                         stderr=subprocess.PIPE,
+                         stdout=subprocess.PIPE)
+
+
+stream = None
 
 
 class MetaData(object):
@@ -113,14 +151,15 @@ def genearate_gradinent(width, height, from_color, to_color):
     inversion = random.randint(0, 1) == 0
     draw_radial_gradient(gradient, from_color, to_color, inversion)
     #  draw_linear_gradient(gradient, from_color, to_color, inversion)
-
     return gradient
 
 
 def scaled_blur(metadata: MetaData):
     back = Image.open(metadata.image_bytes)
-    resized = back.resize((back.width * 3, back.height * 3),
-                          Image.ANTIALIAS).filter(ImageFilter.GaussianBlur(8))
+    resize_rate = 5
+    resized = back.resize(
+        (back.width * resize_rate, back.height * resize_rate),
+        Image.ANTIALIAS).filter(ImageFilter.GaussianBlur(8))
     resized = resized.crop(
         ((resized.width - WIDTH) / 2, (resized.height - HEIGHT) / 2,
          (resized.width + WIDTH) / 2, (resized.height + HEIGHT) / 2))
@@ -131,6 +170,15 @@ def update_bg(meta: MetaData):
     if meta.image_bytes is None:
         restore_bg()
     try:
+        global WIDTH
+        global HEIGHT
+        WIDTH = 0
+        HEIGHT = 0
+        for monitor in screeninfo.get_monitors():
+            if monitor.height > HEIGHT and monitor.width > WIDTH:
+                WIDTH = monitor.width
+                HEIGHT = monitor.height
+        print(f"Screen size is {WIDTH}x{HEIGHT}")
         cover = Image.open(meta.image_bytes)
         #  cover.save(image_path)
         pixels = cover.getcolors(cover.height * cover.width)
@@ -149,17 +197,22 @@ def update_bg(meta: MetaData):
         cover_mask = cover_mask.resize(cover.size, Image.ANTIALIAS)
         cover.putalpha(cover_mask)
         gradient = scaled_blur(meta)
-        # gradient = genearate_gradinent(WIDTH, HEIGHT,
-        # most_frequent_pixel[1],
-        # min_frequent_pixel[1])
-        gradient = scaled_blur(meta)
         gradient.paste(cover, ((WIDTH - cover.width) // 2,
                                (HEIGHT - cover.height) // 2),
                        mask=cover_mask)
+        global current_image
+        current_image = gradient
         gradient.save(image_path)
         subprocess.Popen(['feh', '--bg-center', image_path],
                          stderr=subprocess.PIPE,
                          stdout=subprocess.PIPE)
+        #  global stream
+        #  stream = sd.InputStream(device=None,
+        #  channels=1,
+        #  callback=music_callback,
+        #  blocksize=int(samplerate * 50 / 1000),
+        #  samplerate=samplerate)
+        #  stream.start()
     except Exception as e:
         print(f"We're fucked up, sir. Exception: {e}")
         restore_bg()
@@ -177,6 +230,7 @@ def restore_bg():
         subprocess.Popen(["nitrogen", "--restore"],
                          stderr=subprocess.PIPE,
                          stdout=subprocess.PIPE)
+        #  stream.close()
     except Exception as e:
         print(f"Exception found: {e}")
 
