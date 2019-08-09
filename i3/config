@@ -82,6 +82,7 @@ bindsym $mod+Return exec konsole
 
 # kill focused window
 bindsym Mod1+F4 kill
+bindsym Control+Shift+q kill
 
 # Lock screen
 bindsym control+mod1+l exec betterlockscreen -l

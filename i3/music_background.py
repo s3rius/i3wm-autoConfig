@@ -156,7 +156,8 @@ def genearate_gradinent(width, height, from_color, to_color):
 
 def scaled_blur(metadata: MetaData):
     back = Image.open(metadata.image_bytes)
-    resize_rate = 5
+    resize_rate = math.ceil(WIDTH / back.width)
+    print(f"resize rate: {WIDTH}/{back.width}={resize_rate}")
     resized = back.resize(
         (back.width * resize_rate, back.height * resize_rate),
         Image.ANTIALIAS).filter(ImageFilter.GaussianBlur(8))
