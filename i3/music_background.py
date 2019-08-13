@@ -158,6 +158,7 @@ def scaled_blur(metadata: MetaData):
     back = Image.open(metadata.image_bytes)
     resize_rate = math.ceil(WIDTH / back.width)
     print(f"resize rate: {WIDTH}/{back.width}={resize_rate}")
+    #  resize_rate = 2
     resized = back.resize(
         (back.width * resize_rate, back.height * resize_rate),
         Image.ANTIALIAS).filter(ImageFilter.GaussianBlur(8))
