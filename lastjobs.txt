@@ -1,0 +1,8 @@
+* * * * * /bin/bash ~/.config/i3/lowbatt.sh
+
+* * * * * /bin/bash ~/.config/i3/lowbatt.sh
+
+* * * * * /bin/bash ~/.config/i3/lowbatt.sh
+
+* * * * * /bin/bash ~/.config/i3/lowbatt.sh
+
