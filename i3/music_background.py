@@ -158,7 +158,6 @@ def scaled_blur(metadata: MetaData):
     back = Image.open(metadata.image_bytes)
     resize_rate = math.ceil(WIDTH / back.width)
     print(f"resize rate: {WIDTH}/{back.width}={resize_rate}")
-    #  resize_rate = 2
     resized = back.resize(
         (back.width * resize_rate, back.height * resize_rate),
         Image.ANTIALIAS).filter(ImageFilter.GaussianBlur(8))
@@ -177,12 +176,11 @@ def update_bg(meta: MetaData):
         WIDTH = 0
         HEIGHT = 0
         for monitor in screeninfo.get_monitors():
-            if monitor.height > HEIGHT and monitor.width > WIDTH:
+            if monitor.height >= HEIGHT and monitor.width >= WIDTH:
                 WIDTH = monitor.width
                 HEIGHT = monitor.height
-        print(f"Screen size is {WIDTH}x{HEIGHT}")
+        print(f"Biggest screen size is {WIDTH}x{HEIGHT}")
         cover = Image.open(meta.image_bytes)
-        #  cover.save(image_path)
         pixels = cover.getcolors(cover.height * cover.width)
         most_frequent_pixel = pixels[0]
         min_frequent_pixel = pixels[0]

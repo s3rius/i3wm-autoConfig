@@ -13,13 +13,13 @@
 set $mod Mod4
 
 #Exec at startup block
-exec xinput set-prop "Synaptics s3203" "libinput Tapping Enabled" 1
-exec nitrogen --restore
-exec redshift -l 53.204854:50.127936 
-exec udiskie
-exec libinput-gestures
-exec python ~/.config/i3/music_background.py
-exec deadd-notification-center
+exec  --no-startup-id xinput set-prop "Synaptics s3203" "libinput Tapping Enabled" 1
+exec  --no-startup-id nitrogen --restore
+exec  --no-startup-id redshift -l 53.204854:50.127936 
+exec  --no-startup-id udiskie
+exec  --no-startup-id libinput-gestures
+exec --no-startup-id  python ~/.config/i3/music_background.py
+exec  --no-startup-id deadd-notification-center
 exec /usr/bin/compton --config ~/.compton.conf
 exec setxkbmap -model pc105 -layout us,ru -option grp:caps_toggle
 exec --no-startup-id ~/.config/i3/i3-battery-popup.sh
@@ -38,12 +38,12 @@ font pango:monospace 8
 #bindsym XF86AudioLowerVolume exec --no-startup-id amixer -c 1 -- sset Master playback 5%-
 #bindsym XF86AudioMute exec --no-startup-id amixer -D pulse set Master toggle
 
-bindsym XF86AudioRaiseVolume exec "amixer -c 1 sset Master '5%+'"
-bindsym XF86AudioLowerVolume exec "amixer -c 1 sset Master '5%-'"
-bindsym XF86AudioMute exec "pactl set-sink-mute 0 toggle"
+bindsym XF86AudioRaiseVolume exec "amixer -c 0 sset Master '5%+'"
+bindsym XF86AudioLowerVolume exec "amixer -c 0 sset Master '5%-'"
+bindsym XF86AudioMute exec "amixer sset Master toggle"
 
 #Open file manager
-bindsym $mod+e exec konsole -e xdg-open ~ 
+bindsym $mod+e exec xdg-open ~ 
 
 # Multimedia buttons
 bindsym XF86AudioPlay exec playerctl play-pause
