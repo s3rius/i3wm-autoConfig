@@ -53,12 +53,12 @@ else
 	crontab i3/crontabWork.txt
 	print "Added new job in cron for battery check"
 fi
-mkdir -p "~/.config/rofi/themes/"
+mkdir -p "$HOME/.config/rofi/themes/"
 
-if [ -e "~/.config/rofi/config" ]; then
+if [ -e "$HOME/.config/rofi/config" ]; then
   print "ROFI config found"
 else
-  touch "~/.config/rofi/config"
+  touch "$HOME/.config/rofi/config"
   print "Created ROFI config"
 fi
 
