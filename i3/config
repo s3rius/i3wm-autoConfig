@@ -13,8 +13,9 @@
 set $mod Mod4
 
 #Exec at startup block
-exec  --no-startup-id xinput set-prop "Synaptics s3203" "libinput Tapping Enabled" 1
+exec  --no-startup-id xinput set-prop "SYNA3081:00 06CB:826F Touchpad" "libinput Tapping Enabled" 1
 exec  --no-startup-id nitrogen --restore
+exec  --no-startup-id xscreensaver -no-splash
 exec  --no-startup-id redshift -l 53.204854:50.127936 
 exec  --no-startup-id udiskie
 exec  --no-startup-id libinput-gestures
@@ -224,7 +225,7 @@ for_window [class=".*"] border pixel 0
 # for_window [class="^.*"] border pixel 0 floating enable
 # new_window 1pixel
 gaps inner 10
-gaps outer 25
+gaps outer 10
 # colors
 # class                      border   backgr.  text
 client.focused	             #315858  #315858  #111111

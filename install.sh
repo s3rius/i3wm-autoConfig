@@ -24,7 +24,7 @@ else
   rm -rfv pikaur/
 fi
 
-sudo pacman -S --needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer python
+sudo pacman -S --needed i3-gaps compton conky nitrogen rofi maim xclip playerctl cronie help2man light ttf-font-awesome imagemagick feh highlight ranger zathura-pdf-mupdf ffmpegthumbnailer python konsole
 
 sudo pikaur -S --noedit --nodiff --needed xkb-switch deadd-notification-center-bin i3lock-color betterlockscreen-git
 
