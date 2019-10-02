@@ -66,14 +66,62 @@ TEXT
     # },
     # ${endif}
     {
+      "full_text": "α ${cpu cpu1}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+    {
+      "full_text": "β ${cpu cpu2}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+    {
+      "full_text": "γ ${cpu cpu3}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+    {
+      "full_text": "δ ${cpu cpu4}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+          {
+      "full_text": "ε ${cpu cpu5}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+          {
+      "full_text": "ζ ${cpu cpu6}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+          {
+      "full_text": "η ${cpu cpu7}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+          {
+      "full_text": "θ ${cpu cpu8}%",
+      "color": "\#88ABC4",
+      "min_width": 50,
+      "align": "center"
+    },
+    {
         "icon"      : "$HOME/.config/i3/xbmicons/mem.xbm",
-        "full_text" : "${mem} [ ${memperc}% ] ",
+        "full_text" : " ${mem} [ ${memperc}% ] ",
         "color"     : ${if_match ${memperc}>80}"\#ff0000"${else}"\#88ABC4"${endif}
     },
     {
         "icon"      : "~/.config/i3/xbmicons/temp.xbm",
-        "full_text" : "${acpitemp}°C ",
-        "color"     : ${if_match ${acpitemp}>55}"\#ff0000"${else}"\#88ABC4"${endif}
+        "full_text" : ${if_match ${acpitemp}>55}" ${acpitemp}°C"${else}" ${acpitemp}°C"${endif},
+        "color"     : ${if_match ${acpitemp}>55}"\#ff0000"${else}"\#88abc4"${endif}
     }, 
     { 
         "full_text" : "${exec xkb-switch | sed 's/us/en/' | tr '[a-z]' '[A-Z]'}",

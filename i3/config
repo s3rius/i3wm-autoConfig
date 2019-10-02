@@ -15,8 +15,10 @@ set $mod Mod4
 #Exec at startup block
 exec  --no-startup-id xinput set-prop "SYNA3081:00 06CB:826F Touchpad" "libinput Tapping Enabled" 1
 exec  --no-startup-id nitrogen --restore
+exec  --no-startup-id avizo-service
 exec  --no-startup-id xscreensaver -no-splash
 exec  --no-startup-id redshift -l 53.204854:50.127936 
+exec  --no-startup-id echo "power on" | bluetoothctl
 exec  --no-startup-id udiskie
 exec  --no-startup-id libinput-gestures
 exec --no-startup-id  python ~/.config/i3/music_background.py
@@ -39,9 +41,13 @@ font pango:monospace 8
 #bindsym XF86AudioLowerVolume exec --no-startup-id amixer -c 1 -- sset Master playback 5%-
 #bindsym XF86AudioMute exec --no-startup-id amixer -D pulse set Master toggle
 
-bindsym XF86AudioRaiseVolume exec "amixer -c 0 sset Master '5%+'"
-bindsym XF86AudioLowerVolume exec "amixer -c 0 sset Master '5%-'"
-bindsym XF86AudioMute exec "amixer sset Master toggle"
+# bindsym XF86AudioRaiseVolume exec "amixer -c 0 sset Master '5%+'"
+# bindsym XF86AudioLowerVolume exec "amixer -c 0 sset Master '5%-'"
+# bindsym XF86AudioMute exec "amixer sset Master toggle"
+
+bindsym XF86AudioRaiseVolume exec "volumectl raise"
+bindsym XF86AudioLowerVolume exec "volumectl lower"
+bindsym XF86AudioMute exec "volumectl mute"
 
 #Open file manager
 bindsym $mod+e exec xdg-open ~ 
@@ -65,8 +71,8 @@ bindsym $mod+Shift+Print exec maim -s ~/Pictures/screenshot$(date +%s).png && no
 
 
 #Display blight
-bindsym XF86MonBrightnessUp exec light -A 10
-bindsym XF86MonBrightnessDown exec light -U 10
+bindsym XF86MonBrightnessUp exec lightctl raise
+bindsym XF86MonBrightnessDown exec lightctl lower
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -203,29 +209,62 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym $left       resize shrink width 5 px or 5 ppt
+        bindsym $down       resize grow height 5 px or 5 ppt
+        bindsym $up         resize shrink height 5 px or 5 ppt
+        bindsym $right      resize grow width 5 px or 5 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left        resize shrink width 5 px or 5 ppt
+        bindsym Down        resize grow height 5 px or 5 ppt
+        bindsym Up          resize shrink height 5 px or 5 ppt
+        bindsym Right       resize grow width 5 px or 5 ppt
 
-        # back to normal: Enter or Escape
+       # Resize more rapidy with shift
+        bindsym Shift+$left       resize shrink width 50 px or 50 ppt
+        bindsym Shift+$down       resize grow height 50 px or 50 ppt
+        bindsym Shift+$up         resize shrink height 50 px or 50 ppt
+        bindsym Shift+$right      resize grow width 50 px or 50 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Shift+Left        resize shrink width 50 px or 50 ppt
+        bindsym Shift+Down        resize grow height 50 px or 50 ppt
+        bindsym Shift+Up          resize shrink height 50 px or 50 ppt
+        bindsym Shift+Right       resize grow width 50 px or 50 ppt
+
+        # Resize more finely with Ctrl
+        bindsym Ctrl+$left       resize shrink width 1 px or 1 ppt
+        bindsym Ctrl+$down       resize grow height 1 px or 1 ppt
+        bindsym Ctrl+$up         resize shrink height 1 px or 1 ppt
+        bindsym Ctrl+$right      resize grow width 1 px or 1 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Ctrl+Left        resize shrink width 1 px or 1 ppt
+        bindsym Ctrl+Down        resize grow height 1 px or 1 ppt
+        bindsym Ctrl+Up          resize shrink height 1 px or 1 ppt
+        bindsym Ctrl+Right       resize grow width 1 px or 1 ppt
+
+        # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
         bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
 }
 
 bindsym $mod+r mode "resize"
+
+for_window [class="avizo-service"] floating enable
+no_focus [window_type="notification"]
+
 
 for_window [class=".*"] border pixel 0
 # for_window [class="^.*"] border pixel 0 floating enable
 # new_window 1pixel
 gaps inner 10
 gaps outer 10
+
+# It's rounded too lol
+border_radius 10
+
 # colors
 # class                      border   backgr.  text
 client.focused	             #315858  #315858  #111111
