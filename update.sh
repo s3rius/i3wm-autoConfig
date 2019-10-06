@@ -25,7 +25,7 @@ cp ~/.conkyrc .
 print "Loaded .conkyrc"
 cp ~/.compton.conf .
 print "Loaded compton.conf"
-cp ~/.config/rofi/themes/hyper.rasi ./rofi_themes/
+cp ~/.config/rofi/themes/* rofi_themes
 print "Loaded rofi theme [hyper]"
 cd $path
 print "returned into $path" 
