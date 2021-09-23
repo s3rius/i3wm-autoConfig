@@ -66,7 +66,7 @@ Use arrow keys to change focused window size.
 
 ### Navigation
 * To navigate opened windows on screen use: `Super+Arrow keys`;
-* To move windows in current workspace ues: `Super+Shift+Arrow keys`.
+* To move windows in current workspace use: `Super+Shift+Arrow keys`.
 ### Layouts
 * Change layout to stacked: `Super+s`;
 * Change layout to tabbed: `Super+w`;
